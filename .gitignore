@@ -23,9 +23,23 @@ cache2/
 *.mozlz4
 *.jsonlz4
 *.bin
+*.db
 **/data/
 **/logs/
 *.log
+
+# Audio and Image assets (which can be very large)
+*.mp3
+*.wav
+*.ogg
+*.flac
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+outputs/
+temp/
 
 # Large Binary Files & Media (Prevents GitHub RPC errors)
 *.mp4
