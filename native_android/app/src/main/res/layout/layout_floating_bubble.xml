@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!-- The visible floating bubble (glowing blue circle) -->
+    <ImageView
+        android:id="@+id/bubble_icon"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="10dp"
+        android:background="@android:drawable/btn_default"
+        android:contentDescription="AirShare"
+        android:elevation="8dp" />
+
+    <!-- A hidden 1x1 WebView inside the overlay window to execute the gesture lens silently -->
+    <android.webkit.WebView
+        android:id="@+id/hidden_webview"
+        android:layout_width="1px"
+        android:layout_height="1px"
+        android:visibility="visible"
+        android:alpha="0.0" />
+</FrameLayout>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirShare - OS Floating Gesture Sharing</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- MediaPipe Hand Tracking -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="glass-bg"></div>
+    <div class="glow-orb" id="orb-1"></div>
+    <div class="glow-orb" id="orb-2"></div>
+
+    <!-- Main Simulator Frame -->
+    <div class="simulator-layout">
+        
+        <!-- Left Side: Dynamic Radar & Control Hub -->
+        <div class="card panel-left">
+            <header>
+                <div class="logo">
+                    <span class="pulse-dot"></span>
+                    <h1>AirShare Service</h1>
+                </div>
+                <p class="subtitle">System-Level Background Agent</p>
+            </header>
+
+            <div class="service-status-box">
+                <div class="status-row">
+                    <span>Background Daemon:</span>
+                    <span class="status-indicator active">RUNNING (VPN Mode)</span>
+                </div>
+                <div class="status-row">
+                    <span>WebSocket Link:</span>
+                    <span class="status-indicator" id="ws-status">Connecting...</span>
+                </div>
+            </div>
+
+            <!-- Nearby Discovery Radar -->
+            <div class="discovery-radar-section">
+                <h4>Discovered Peers Nearby</h4>
+                <div class="radar-container">
+                    <div class="radar-circle"></div>
+                    <div class="radar-circle delay-1"></div>
+                    <div class="radar-circle delay-2"></div>
+                    <div class="device-hub">
+                        <span class="hub-icon">📲</span>
+                    </div>
+                    <div class="discovered-devices-list" id="devices-list">
+                        <div class="searching-text">Listening on local network...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setup-guide">
+                <h4>How to Demo (Instagram Reel):</h4>
+                <ol>
+                    <li>Open this URL on both phones (or laptop + phone).</li>
+                    <li>Both devices will **auto-detect** each other instantly over the internet.</li>
+                    <li>Tap the **floating bubble** on the phone screen to activate the gesture camera overlay.</li>
+                    <li>Make a **Grab (Fist) ✊** to lift a photo, and **Release (Open Hand) ✋** on the other phone to drop it.</li>
+                </ol>
+                <div class="ip-info-box">
+                    <span>📱 Scan / Open:</span>
+                    <strong id="ip-address">Loading IP...</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: The Phone Screen Mockup (Gallery / Home) -->
+        <div class="phone-frame">
+            <div class="phone-screen">
+                
+                <!-- Phone Status Bar -->
+                <div class="phone-header">
+                    <span class="time">12:45</span>
+                    <div class="icons">📶 🔋 98%</div>
+                </div>
+
+                <!-- Main Viewport: Mock Gallery / Photo Viewer -->
+                <div class="phone-body">
+                    
+                    <!-- Mode: Gallery Grid -->
+                    <div class="gallery-view" id="gallery-grid">
+                        <div class="gallery-header">
+                            <h3>My Gallery</h3>
+                            <button class="btn-upload-pic" onclick="document.getElementById('file-input').click()">+</button>
+                            <input type="file" id="file-input" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="photos-grid">
+                            <div class="photo-item active" onclick="selectPhoto(this)">
+                                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&q=80" alt="Art 1">
+                            </div>
+                            <div class="photo-item" onclick="selectPhoto(this)">
+                                <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=400&q=80" alt="Art 2">
+                            </div>
+                            <div class="photo-item" onclick="selectPhoto(this)">
+                                <img src="https://images.unsplash.com/photo-1604871000636-074fa5117945?w=400&q=80" alt="Art 3">
+                            </div>
+                            <div class="photo-item" onclick="selectPhoto(this)">
+                                <img src="https://images.unsplash.com/photo-1617791160505-6f006e121980?w=400&q=80" alt="Art 4">
+                            </div>
+                        </div>
+                        <div class="active-photo-preview">
+                            <span>Selected Photo (Ready to Grab)</span>
+                            <div class="main-preview-frame">
+                                <img id="active-photo" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&q=80" alt="Active Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mode: Receiver view (Inbox) -->
+                    <div class="received-overlay" id="received-view">
+                        <div class="received-banner">Received via AirShare</div>
+                        <div class="received-photo-wrapper" id="received-photo-frame">
+                            <div class="empty-inbox">
+                                <span class="empty-icon">✋</span>
+                                <p>Perform Open-Hand gesture to drop received image here.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Floating Gesture Bubble (Huawei System-level Simulator) -->
+                <div class="floating-bubble" id="airshare-bubble" onclick="toggleGestureCamera()">
+                    <span class="bubble-icon">✊</span>
+                    <span class="ping-ring"></span>
+                </div>
+
+                <!-- Floating Camera Overlay Card (Widget) -->
+                <div class="floating-camera-card" id="camera-overlay">
+                    <div class="widget-header">
+                        <span>AirShare Lens</span>
+                        <div class="widget-badge" id="gesture-badge">Idle</div>
+                    </div>
+                    <div class="widget-video-container">
+                        <video id="webcam" autoplay playsinline muted></video>
+                        <canvas id="output-canvas"></canvas>
+                        
+                        <!-- Hud info -->
+                        <div class="widget-hud">
+                            <span id="hud-status">Connecting Camera...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone Home Indicator Bar -->
+                <div class="phone-home-bar"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Alert toast for gesture signals -->
+    <div id="toast" class="toast">Action Triggered!</div>
+
+    <script src="script.js"></script>
+</body>
+</html>

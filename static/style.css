@@ -1,0 +1,665 @@
+:root {
+    --bg-dark: #07080c;
+    --primary: #10b981;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.4);
+    --primary-glow: rgba(16, 185, 129, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Background Glowing Orbs */
+.glass-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8), #030712);
+    z-index: -3;
+}
+
+.glow-orb {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    filter: blur(140px);
+    z-index: -2;
+    opacity: 0.35;
+    pointer-events: none;
+    animation: floatOrb 15s infinite alternate ease-in-out;
+}
+
+#orb-1 { background: var(--accent); top: 5%; left: 5%; }
+#orb-2 { background: var(--primary); bottom: 5%; right: 5%; animation-delay: -7s; }
+
+@keyframes floatOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(60px, 80px) scale(1.15); }
+}
+
+/* Simulator Grid Layout */
+.simulator-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    width: 100%;
+    max-width: 1100px;
+    align-items: center;
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden;
+    }
+    .simulator-layout {
+        display: block !important;
+        width: 100% !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .panel-left {
+        display: none !important;
+    }
+    .phone-frame {
+        width: 100% !important;
+        height: 100vh !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .phone-home-bar {
+        display: none !important;
+    }
+}
+
+/* Left panel style */
+.panel-left {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    padding: 30px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 40%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 10px var(--primary);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.25); opacity: 1; }
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+/* Service Info Panel */
+.service-status-box {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+}
+
+.status-indicator {
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.status-indicator.active {
+    color: var(--primary);
+    text-shadow: 0 0 5px rgba(16, 185, 129, 0.4);
+}
+
+.status-indicator.online {
+    color: var(--accent);
+    text-shadow: 0 0 5px rgba(59, 130, 246, 0.4);
+}
+
+/* Radar discovery layout */
+.discovery-radar-section {
+    padding: 15px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--glass-border);
+    text-align: center;
+}
+
+.discovery-radar-section h4 {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.radar-container {
+    position: relative;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.device-hub {
+    width: 44px;
+    height: 44px;
+    background: radial-gradient(circle, var(--accent) 0%, #1e3a8a 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.hub-icon { font-size: 1.1rem; }
+
+.radar-circle {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    border-radius: 50%;
+    animation: radarPulse 4s infinite linear;
+    opacity: 0;
+    z-index: 1;
+}
+
+.radar-circle.delay-1 { animation-delay: 1.3s; }
+.radar-circle.delay-2 { animation-delay: 2.6s; }
+
+@keyframes radarPulse {
+    0% { width: 44px; height: 44px; opacity: 0.8; }
+    100% { width: 260px; height: 260px; opacity: 0; }
+}
+
+.discovered-devices-list {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 6;
+}
+
+.searching-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    position: absolute;
+    bottom: 5px;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.9; }
+}
+
+.discovered-device {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.discovered-device::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--primary);
+}
+
+.discovered-device:nth-child(1) { transform: translate(-90px, -20px); }
+.discovered-device:nth-child(2) { transform: translate(90px, 20px); }
+.discovered-device:nth-child(3) { transform: translate(-50px, 35px); }
+
+.setup-guide h4 {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.setup-guide ol {
+    padding-left: 18px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ip-info-box {
+    margin-top: 15px;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ip-info-box strong {
+    font-family: monospace;
+    color: #93c5fd;
+}
+
+/* ========================================= */
+/* Phone Screen Mockup Simulator */
+/* ========================================= */
+.phone-frame {
+    width: 360px;
+    height: 720px;
+    background: #0f111a;
+    border: 10px solid #1f2937;
+    border-radius: 48px;
+    box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 0 4px #374151;
+    overflow: hidden;
+    position: relative;
+}
+
+.phone-screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #0d0f17;
+    position: relative;
+}
+
+/* Phone Status Bar */
+.phone-header {
+    height: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+/* Phone Main Body */
+.phone-body {
+    flex-grow: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+}
+
+/* Gallery styles */
+.gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.gallery-header h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.btn-upload-pic {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.photo-item {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-item.active {
+    border-color: var(--accent);
+    transform: scale(0.95);
+}
+
+.active-photo-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.active-photo-preview span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.main-preview-frame {
+    width: 100%;
+    height: 220px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+    background: #000;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.main-preview-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Received View Overlay */
+.received-overlay {
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 170px;
+}
+
+.received-banner {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.received-photo-wrapper {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.2);
+    min-height: 120px;
+}
+
+.empty-inbox {
+    text-align: center;
+    padding: 10px;
+}
+
+.empty-icon {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 5px;
+    opacity: 0.5;
+}
+
+.empty-inbox p {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.received-image {
+    max-width: 100%;
+    max-height: 150px;
+    object-fit: contain;
+    border-radius: 6px;
+    animation: slideUpIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideUpIn {
+    0% { transform: translateY(20px) scale(0.9); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Floating Action Bubble */
+.floating-bubble {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--accent) 0%, #1e40af 100%);
+    border-radius: 50%;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 100;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.floating-bubble:hover {
+    transform: scale(1.05);
+}
+
+.bubble-icon {
+    font-size: 1.4rem;
+}
+
+.ping-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    animation: bubblePing 2s infinite ease-out;
+}
+
+@keyframes bubblePing {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ========================================= */
+/* Floating Camera Lens Widget (The Overlay) */
+/* ========================================= */
+.floating-camera-card {
+    position: absolute;
+    top: 50px;
+    left: 16px;
+    right: 16px;
+    background: rgba(15, 17, 26, 0.92);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    z-index: 90;
+    display: none; /* Controlled by bubble toggle */
+    animation: widgetSlideDown 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes widgetSlideDown {
+    0% { transform: translateY(-40px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.widget-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.widget-badge.grab { background: rgba(59, 130, 246, 0.2); color: var(--accent); }
+.widget-badge.release { background: rgba(16, 185, 129, 0.2); color: var(--primary); }
+
+.widget-video-container {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    background: #000;
+}
+
+.widget-video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+.widget-video-container canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+    pointer-events: none;
+}
+
+.widget-hud {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    color: #34d399;
+}
+
+/* Home Indicator Bar */
+.phone-home-bar {
+    height: 4px;
+    width: 100px;
+    background: #4b5563;
+    border-radius: 2px;
+    margin: 8px auto;
+}
+
+/* Toast Message */
+.toast {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(16, 185, 129, 0.95);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
